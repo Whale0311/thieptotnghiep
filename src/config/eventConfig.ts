@@ -7,14 +7,13 @@ export type PartyDateOption = {
 
 export const eventConfig = {
   graduateName: "Nguyễn Quốc Anh",
-  graduatePhoto:
-    "https://images.unsplash.com/photo-1627556704290-2b1f5853ff78?auto=format&fit=crop&w=900&q=85",
+  graduatePhoto: "/images/20224919_NguyenQuocAnh.jpg",
   showGraduatePhoto: true,
 
   invitationMessage:
     "Một chặng đường khép lại, một hành trình mới bắt đầu. Mình rất vui nếu bạn có thể đến chung vui cùng mình trong ngày đặc biệt này.",
 
-  ceremonyDate: "Chủ Nhật, 26/09/2026",
+  ceremonyDate: "Thứ 7, 26/09/2026",
   ceremonyTime: "09:30",
   ceremonyLocation: "Sân C2 - Cổng Parabol, Đại học Bách Khoa Hà Nội",
   ceremonyAddress: "Số 1 Đại Cồ Việt, Bạch Mai, Hà Nội",

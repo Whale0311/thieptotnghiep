@@ -20,6 +20,7 @@ export function ThankYou({ rsvp }: { rsvp: RSVPData }) {
           {rsvp.partyAttendance && rsvp.partyDateTime && <div><dt>Thời gian tiệc</dt><dd>{rsvp.partyDateTime}</dd></div>}
           {rsvp.partyAttendance && rsvp.numberOfAttendees && <div><dt>Số người</dt><dd>{rsvp.numberOfAttendees}</dd></div>}
           {rsvp.partyAttendance && rsvp.foodNotes && <div><dt>Lưu ý món ăn</dt><dd>{rsvp.foodNotes}</dd></div>}
+          {rsvp.wellWish && <div><dt>Lời chúc</dt><dd>{rsvp.wellWish}</dd></div>}
           <div><dt>Trạng thái</dt><dd>{statusLabels[status]}</dd></div>
         </dl>
       </div>

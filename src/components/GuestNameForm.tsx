@@ -1,31 +1,38 @@
-import { useState } from 'react'
+import { useState } from "react";
 
 type Props = {
-  attendingCeremony: boolean
-  initialName: string
-  onContinue: (name: string) => void
-}
+  attendingCeremony: boolean;
+  initialName: string;
+  initialWish: string;
+  onContinue: (name: string, wish: string) => void;
+};
 
-export function GuestNameForm({ attendingCeremony, initialName, onContinue }: Props) {
-  const [name, setName] = useState(initialName)
-  const [error, setError] = useState('')
+export function GuestNameForm({
+  attendingCeremony,
+  initialName,
+  initialWish,
+  onContinue,
+}: Props) {
+  const [name, setName] = useState(initialName);
+  const [wish, setWish] = useState(initialWish);
+  const [error, setError] = useState("");
 
   function submit(event: React.FormEvent) {
-    event.preventDefault()
-    const value = name.trim().replace(/\s+/g, ' ')
+    event.preventDefault();
+    const value = name.trim().replace(/\s+/g, " ");
     if (value.length < 2) {
-      setError('Vui lòng nhập họ và tên (ít nhất 2 ký tự).')
-      return
+      setError("Vui lòng nhập họ và tên (ít nhất 2 ký tự).");
+      return;
     }
-    onContinue(value)
+    onContinue(value, wish.trim());
   }
 
   return (
     <form className="form-stack" onSubmit={submit} noValidate>
       <p className="warm-message">
         {attendingCeremony
-          ? 'Tuyệt vời! Mình rất vui khi bạn có thể đến. ❤️'
-          : 'Mình rất tiếc vì bạn không thể tham dự lễ tốt nghiệp. Cảm ơn bạn đã gửi lời chúc đến mình. ❤️'}
+          ? "Tuyệt vời! Mình rất vui khi bạn có thể đến. Nếu bạn muốn, hãy để lại một lời chúc nhé. ❤️"
+          : "Mình rất tiếc vì bạn không thể tham dự lễ tốt nghiệp. Nếu bạn muốn, hãy để lại một lời chúc nhé. ❤️"}
       </p>
       <div>
         <label htmlFor="guest-name">Vui lòng cho mình biết tên của bạn.</label>
@@ -36,17 +43,35 @@ export function GuestNameForm({ attendingCeremony, initialName, onContinue }: Pr
           placeholder="Họ và tên"
           value={name}
           onChange={(event) => {
-            setName(event.target.value)
-            setError('')
+            setName(event.target.value);
+            setError("");
           }}
-          aria-describedby={error ? 'name-error' : undefined}
+          aria-describedby={error ? "name-error" : undefined}
           aria-invalid={Boolean(error)}
         />
-        {error && <p id="name-error" className="field-error">{error}</p>}
+        {error && (
+          <p id="name-error" className="field-error">
+            {error}
+          </p>
+        )}
+      </div>
+      <div>
+        <label htmlFor="guest-wish">
+          Bạn có muốn gửi lời chúc đến mình không?{" "}
+          <span className="optional-label">{/* (Không bắt buộc) */}</span>
+        </label>
+        <textarea
+          id="guest-wish"
+          rows={4}
+          maxLength={500}
+          placeholder="Viết một lời chúc ngắn..."
+          value={wish}
+          onChange={(event) => setWish(event.target.value)}
+        />
       </div>
       <button className="button button-primary submit-button" type="submit">
         Tiếp tục <span aria-hidden="true">→</span>
       </button>
     </form>
-  )
+  );
 }

@@ -11,6 +11,7 @@ export type RSVPData = {
   partyDateTime?: string
   numberOfAttendees?: number
   foodNotes?: string
+  wellWish?: string
   submittedAt: string
 }
 
