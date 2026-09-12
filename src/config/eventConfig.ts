@@ -14,14 +14,14 @@ export const eventConfig = {
   invitationMessage:
     "Một chặng đường khép lại, một hành trình mới bắt đầu. Mình rất vui nếu bạn có thể đến chung vui cùng mình trong ngày đặc biệt này.",
 
-  ceremonyDate: "Chủ Nhật, 21/09/2026",
-  ceremonyTime: "08:00",
-  ceremonyLocation: "Hội trường A — Đại học ...",
-  ceremonyAddress: "Số ..., Phường ..., Thành phố ...",
+  ceremonyDate: "Chủ Nhật, 26/09/2026",
+  ceremonyTime: "09:30",
+  ceremonyLocation: "Sân C2 - Cổng Parabol, Đại học Bách Khoa Hà Nội",
+  ceremonyAddress: "Số 1 Đại Cồ Việt, Bạch Mai, Hà Nội",
   mapUrl: "",
 
   contactName: "Nguyễn Quốc Anh",
-  contactPhone: "09xxxxxxxx",
+  contactPhone: "0868953218",
   contactZalo: "",
 
   partyDescription:
