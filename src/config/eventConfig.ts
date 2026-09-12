@@ -7,7 +7,7 @@ export type PartyDateOption = {
 
 export const eventConfig = {
   graduateName: "Nguyễn Quốc Anh",
-  graduatePhoto: "/images/20224919_NguyenQuocAnh.jpg",
+  graduatePhoto: "https://ik.imagekit.io/c9utaptx0/20224919_NguyenQuocAnh.jpg",
   showGraduatePhoto: true,
 
   invitationMessage:
