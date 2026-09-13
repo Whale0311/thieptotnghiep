@@ -4,7 +4,7 @@ import { FOOD_OPTIONS } from "../utils/rsvp";
 
 type Props = {
   onSubmit: (values: {
-    partyDateTime: string;
+    partyDateTimes: string[];
     numberOfAttendees: number;
     foodNotes?: string;
   }) => void;
@@ -13,12 +13,13 @@ type Props = {
 
 export function PartyDetails({ onSubmit, isSubmitting }: Props) {
   const options = eventConfig.partyDateOptions;
-  const [dateId, setDateId] = useState(
-    options.length === 1 ? (options[0]?.id ?? "") : "",
+  const [selectedDateIds, setSelectedDateIds] = useState<string[]>(
+    options.length === 1 && options[0] ? [options[0].id] : [],
   );
   const [attendeeCount, setAttendeeCount] = useState(1);
-  const [foodChoice, setFoodChoice] =
-    useState<(typeof FOOD_OPTIONS)[number]>("Không có");
+  const [foodChoices, setFoodChoices] = useState<
+    (typeof FOOD_OPTIONS)[number][]
+  >([]);
   const [otherFood, setOtherFood] = useState("");
   const [note, setNote] = useState("");
   const [error, setError] = useState("");
@@ -26,23 +27,49 @@ export function PartyDetails({ onSubmit, isSubmitting }: Props) {
 
   function submit(event: React.FormEvent) {
     event.preventDefault();
-    const selected = options.find((option) => option.id === dateId);
-    if (!selected) {
-      setError("Vui lòng chọn thời gian tham gia tiệc.");
+    const selectedDates = options.filter((option) =>
+      selectedDateIds.includes(option.id),
+    );
+    if (!selectedDates.length) {
+      setError("Vui lòng chọn ít nhất một khung thời gian tham gia tiệc.");
       return;
     }
     const notes = [
-      foodChoice !== "Không có" && foodChoice !== "Khác" ? foodChoice : "",
-      foodChoice === "Khác" ? otherFood : "",
+      ...foodChoices.filter(
+        (choice) => choice !== "Không có" && choice !== "Khác",
+      ),
+      foodChoices.includes("Khác") ? otherFood : "",
       note,
     ]
       .map((item) => item.trim())
       .filter(Boolean)
       .join(" — ");
     onSubmit({
-      partyDateTime: `${selected.date} — ${selected.time}`,
+      partyDateTimes: selectedDates.map(
+        (option) => `${option.date} — ${option.time}`,
+      ),
       numberOfAttendees: attendeeCount,
       foodNotes: notes || undefined,
+    });
+  }
+
+  function toggleDate(id: string) {
+    setSelectedDateIds((current) =>
+      current.includes(id)
+        ? current.filter((currentId) => currentId !== id)
+        : [...current, id],
+    );
+    setError("");
+  }
+
+  function toggleFood(option: (typeof FOOD_OPTIONS)[number]) {
+    setFoodChoices((current) => {
+      if (option === "Không có")
+        return current.includes(option) ? [] : [option];
+      const withoutNone = current.filter((choice) => choice !== "Không có");
+      return withoutNone.includes(option)
+        ? withoutNone.filter((choice) => choice !== option)
+        : [...withoutNone, option];
     });
   }
 
@@ -51,21 +78,23 @@ export function PartyDetails({ onSubmit, isSubmitting }: Props) {
       <fieldset>
         <legend>📅 Bạn có thể tham gia vào khung thời gian nào?</legend>
         <p className="availability-note">{eventConfig.partyAvailabilityNote}</p>
+        {!oneOption && (
+          <p className="assistive-copy">
+            Bạn có thể chọn nhiều khung giờ phù hợp.
+          </p>
+        )}
         {oneOption ? (
           <div className="single-option">{options[0].label}</div>
         ) : (
-          <div className="radio-list">
+          <div className="checkbox-list">
             {options.map((option) => (
-              <label className="radio-option" key={option.id}>
+              <label className="checkbox-option" key={option.id}>
                 <input
-                  type="radio"
-                  name="party-date"
+                  type="checkbox"
                   value={option.id}
-                  checked={dateId === option.id}
-                  onChange={() => {
-                    setDateId(option.id);
-                    setError("");
-                  }}
+                  checked={selectedDateIds.includes(option.id)}
+                  onChange={() => toggleDate(option.id)}
+                  disabled={isSubmitting}
                 />
                 <span>{option.label}</span>
               </label>
@@ -100,38 +129,43 @@ export function PartyDetails({ onSubmit, isSubmitting }: Props) {
 
       <fieldset>
         <legend>🍽️ Bạn có món ăn nào không thể ăn hoặc cần lưu ý không?</legend>
+        <p className="assistive-copy">
+          Bạn có thể chọn nhiều phương án nếu cần.
+        </p>
         <div className="food-options">
           {FOOD_OPTIONS.map((option) => (
             <label className="food-option" key={option}>
               <input
-                type="radio"
-                name="food-choice"
-                checked={foodChoice === option}
-                onChange={() => setFoodChoice(option)}
+                type="checkbox"
+                checked={foodChoices.includes(option)}
+                onChange={() => toggleFood(option)}
+                disabled={isSubmitting}
               />
               <span>{option}</span>
             </label>
           ))}
         </div>
-        {foodChoice === "Khác" && (
+        {foodChoices.includes("Khác") && (
           <input
             aria-label="Món ăn cần lưu ý khác"
             maxLength={300}
             placeholder="Ví dụ: Dị ứng đậu phộng"
             value={otherFood}
             onChange={(event) => setOtherFood(event.target.value)}
+            disabled={isSubmitting}
           />
         )}
         <label className="notes-label" htmlFor="food-note">
-          Ghi chú thêm (không bắt buộc)
+          Ghi chú thêm
         </label>
         <textarea
           id="food-note"
           rows={3}
           maxLength={300}
-          placeholder="Ví dụ: Không ăn cay"
+          placeholder="Ví dụ: Mình tặng cậu thùng bia có được không?"
           value={note}
           onChange={(event) => setNote(event.target.value)}
+          disabled={isSubmitting}
         />
       </fieldset>
       {error && (

@@ -54,9 +54,11 @@ export async function sendRSVPToDiscord(rsvp: RSVPData): Promise<void> {
   if (rsvp.partyAttendance) {
     fields.push(
       {
-        name: "📅 Thời gian tiệc",
-        value: cleanText(rsvp.partyDateTime!, 120),
-        inline: true,
+        name: "📅 Các khung giờ phù hợp",
+        value: rsvp.partyDateTimes!
+          .map((dateTime) => `• ${cleanText(dateTime, 120)}`)
+          .join("\n"),
+        inline: false,
       },
       {
         name: "👥 Số người",

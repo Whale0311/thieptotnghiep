@@ -37,13 +37,13 @@ export function validateRSVP(rsvp: RSVPData): string | null {
   }
 
   if (!rsvp.partyAttendance) {
-    if (rsvp.partyDateTime || rsvp.numberOfAttendees || rsvp.foodNotes) {
+    if (rsvp.partyDateTimes?.length || rsvp.numberOfAttendees || rsvp.foodNotes) {
       return 'Thông tin tiệc chỉ được gửi khi bạn tham gia tiệc.'
     }
     return null
   }
 
-  if (!rsvp.partyDateTime) return 'Vui lòng chọn thời gian tham gia tiệc.'
+  if (!rsvp.partyDateTimes?.length) return 'Vui lòng chọn ít nhất một khung thời gian tham gia tiệc.'
   if (!Number.isInteger(rsvp.numberOfAttendees) || rsvp.numberOfAttendees! < 1) {
     return 'Số người tham dự phải từ 1 người trở lên.'
   }

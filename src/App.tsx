@@ -120,7 +120,7 @@ export default function App() {
             <div className="hero__ornament" aria-hidden="true">
               ✦
             </div>
-            <p className="eyebrow">Trân trọng kính mời</p>
+            <h2 className="hero__name">Trân trọng kính mời</h2>
             <h1>Lễ tốt nghiệp</h1>
             <p className="hero__name">{eventConfig.graduateName}</p>
             <div
@@ -211,10 +211,13 @@ export default function App() {
 
       {step === "name" && ceremonyReply !== null && (
         <div className="flow-column">
-          <BackButton label="Quay lại lời mời" onClick={() => goBack("invitation")} />
+          <BackButton
+            label="Quay lại lời mời"
+            onClick={() => goBack("invitation")}
+          />
           <SectionCard
             eyebrow="Một chút thông tin"
-            title="Mình nên gọi bạn là gì?"
+            title="Cho mình biết tên bạn nhé"
           >
             <GuestNameForm
               attendingCeremony={ceremonyReply}
@@ -307,12 +310,17 @@ export default function App() {
 
       {step === "thanks" && completedRSVP && (
         <div className="flow-column flow-column--thanks">
-          <BackButton label="Về lại lời mời" onClick={() => goBack("invitation")} />
+          <BackButton
+            label="Về lại lời mời"
+            onClick={() => goBack("invitation")}
+          />
           <ThankYou rsvp={completedRSVP} />
         </div>
       )}
 
-      <footer>Được chuẩn bị với tất cả sự trân trọng</footer>
+      <footer>
+        Sự hiện diện của bạn sẽ làm ngày đặc biệt này thêm trọn vẹn.
+      </footer>
     </main>
   );
 }

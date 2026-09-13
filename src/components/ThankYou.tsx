@@ -17,7 +17,7 @@ export function ThankYou({ rsvp }: { rsvp: RSVPData }) {
         <dl>
           <div><dt>Lễ tốt nghiệp</dt><dd>{rsvp.graduationAttendance ? '✓ Tham gia' : 'Không tham gia'}</dd></div>
           <div><dt>Tiệc tốt nghiệp</dt><dd>{rsvp.partyAttendance ? '✓ Tham gia' : 'Không tham gia'}</dd></div>
-          {rsvp.partyAttendance && rsvp.partyDateTime && <div><dt>Thời gian tiệc</dt><dd>{rsvp.partyDateTime}</dd></div>}
+          {rsvp.partyAttendance && rsvp.partyDateTimes?.length && <div><dt>Khung giờ phù hợp</dt><dd>{rsvp.partyDateTimes.join(' · ')}</dd></div>}
           {rsvp.partyAttendance && rsvp.numberOfAttendees && <div><dt>Số người</dt><dd>{rsvp.numberOfAttendees}</dd></div>}
           {rsvp.partyAttendance && rsvp.foodNotes && <div><dt>Lưu ý món ăn</dt><dd>{rsvp.foodNotes}</dd></div>}
           {rsvp.wellWish && <div><dt>Lời chúc</dt><dd>{rsvp.wellWish}</dd></div>}

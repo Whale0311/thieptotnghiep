@@ -7,7 +7,8 @@ export type PartyDateOption = {
 
 export const eventConfig = {
   graduateName: "Nguyễn Quốc Anh",
-  graduatePhoto: "https://ik.imagekit.io/c9utaptx0/20224919_NguyenQuocAnh.jpg",
+  // graduatePhoto: "https://ik.imagekit.io/c9utaptx0/20224919_NguyenQuocAnh.jpg",
+  graduatePhoto: "images/mhx_2023_v4.jpg",
   showGraduatePhoto: true,
 
   invitationMessage:
@@ -17,7 +18,7 @@ export const eventConfig = {
   ceremonyTime: "09:30",
   ceremonyLocation: "Sân C2 - Cổng Parabol, Đại học Bách Khoa Hà Nội",
   ceremonyAddress: "Số 1 Đại Cồ Việt, Bạch Mai, Hà Nội",
-  mapUrl: "",
+  mapUrl: "https://maps.app.goo.gl/G7rVwWvvqv8C2K4d6",
 
   contactName: "Nguyễn Quốc Anh",
   contactPhone: "0868953218",
@@ -28,6 +29,30 @@ export const eventConfig = {
   partyAvailabilityNote:
     "Lưu ý: ngày 05/10 mình không thể tổ chức, nên ngày này không có trong các lựa chọn. Mong các bạn thông cảm và chọn một trong các khung thời gian khác.",
   partyDateOptions: [
+    {
+      id: "party-sat-19-09-lunch",
+      date: "Thứ Bảy, 19/09/2026",
+      time: "12:00",
+      label: "Thứ Bảy — 19/09/2026 — 12:00 (buổi trưa)",
+    },
+    {
+      id: "party-sat-19-09-evening",
+      date: "Thứ Bảy, 19/09/2026",
+      time: "18:00",
+      label: "Thứ Bảy — 19/09/2026 — 18:00 (buổi tối)",
+    },
+    {
+      id: "party-sat-20-09-lunch",
+      date: "Chủ Nhật, 20/09/2026",
+      time: "12:00",
+      label: "Chủ Nhật — 20/09/2026 — 12:00 (buổi trưa)",
+    },
+    {
+      id: "party-sat-20-09-evening",
+      date: "Chủ Nhật, 20/09/2026",
+      time: "18:00",
+      label: "Chủ Nhật — 20/09/2026 — 18:00 (buổi tối)",
+    },
     {
       id: "party-sat-26-09-lunch",
       date: "Thứ Bảy, 26/09/2026",
@@ -77,16 +102,16 @@ export const eventConfig = {
       label: "Thứ Bảy — 10/10/2026 — 18:00 (buổi tối)",
     },
     {
-      id: "party-sun-11-11-lunch",
-      date: "Chủ Nhật, 11/11/2026",
+      id: "party-sun-11-10-lunch",
+      date: "Chủ Nhật, 11/10/2026",
       time: "12:00",
-      label: "Chủ Nhật — 11/11/2026 — 12:00 (buổi trưa)",
+      label: "Chủ Nhật — 11/10/2026 — 12:00 (buổi trưa)",
     },
     {
-      id: "party-sun-11-11-evening",
-      date: "Chủ Nhật, 11/11/2026",
+      id: "party-sun-11-10-evening",
+      date: "Chủ Nhật, 11/10/2026",
       time: "18:00",
-      label: "Chủ Nhật — 11/11/2026 — 18:00 (buổi tối)",
+      label: "Chủ Nhật — 11/10/2026 — 18:00 (buổi tối)",
     },
   ] satisfies PartyDateOption[],
 
