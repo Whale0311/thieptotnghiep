@@ -26,8 +26,7 @@ export const eventConfig = {
 
   partyDescription:
     "Sau buổi lễ, mình đang dự định tổ chức một buổi tiệc nhỏ để cùng mọi người gặp gỡ và chia sẻ niềm vui. Bạn có thể cho mình biết khung thời gian cuối tuần phù hợp với bạn không?",
-  // partyAvailabilityNote:
-  //   "Lưu ý: ngày 05/10 mình không thể tổ chức, nên ngày này không có trong các lựa chọn. Mong các bạn thông cảm và chọn một trong các khung thời gian khác.",
+  partyAvailabilityNote: "",
   partyDateOptions: [
     {
       id: "party-sat-19-09-lunch",
