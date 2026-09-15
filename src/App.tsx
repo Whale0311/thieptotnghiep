@@ -2,14 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { AttendanceChoice } from "./components/AttendanceChoice";
 import { BackButton } from "./components/BackButton";
 import { GuestNameForm } from "./components/GuestNameForm";
-import { PartyDetails } from "./components/PartyDetails";
 import { SectionCard } from "./components/SectionCard";
 import { ThankYou } from "./components/ThankYou";
 import { eventConfig } from "./config/eventConfig";
 import { sendRSVPToDiscord } from "./services/discordWebhook";
 import type { RSVPData, SubmissionState } from "./types/rsvp";
 
-type Step = "invitation" | "name" | "party" | "party-details" | "thanks";
+// Loại bỏ các bước party khỏi Type
+type Step = "invitation" | "name" | "thanks";
 
 const initialDraft = {
   guestName: "",
@@ -21,12 +21,10 @@ export default function App() {
   const [step, setStep] = useState<Step>("invitation");
   const [draft, setDraft] = useState(initialDraft);
   const [completedRSVP, setCompletedRSVP] = useState<RSVPData | null>(null);
-  const [submissionState, setSubmissionState] =
-    useState<SubmissionState>("idle");
+  const [submissionState, setSubmissionState] = useState<SubmissionState>("idle");
   const [submissionError, setSubmissionError] = useState("");
 
   const ceremonyReply = draft.graduationAttendance;
-  const partyOptionsAvailable = eventConfig.partyDateOptions.length > 0;
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -37,6 +35,7 @@ export default function App() {
       guestName: draft.guestName,
       wellWish: draft.wellWish || undefined,
       graduationAttendance: ceremonyReply === true,
+      partyAttendance: false, // Mặc định là false vì đã bỏ phần tiệc
       submittedAt: new Date().toISOString(),
     }),
     [ceremonyReply, draft.guestName, draft.wellWish],
@@ -49,9 +48,17 @@ export default function App() {
     setStep("name");
   }
 
+  // Sửa lại hàm này để gửi dữ liệu luôn sau khi nhập tên & lời chúc
   function saveName(guestName: string, wellWish: string) {
     setDraft((current) => ({ ...current, guestName, wellWish }));
-    setStep("party");
+    
+    const finalRSVP = {
+      ...baseRSVP,
+      guestName,
+      wellWish: wellWish || undefined,
+    };
+    
+    void submitRSVP(finalRSVP);
   }
 
   function goBack(target: Exclude<Step, "thanks">) {
@@ -73,9 +80,6 @@ export default function App() {
       setSubmissionState("error");
       const safeMessages = [
         "Vui lòng nhập họ và tên (ít nhất 2 ký tự).",
-        "Thông tin tiệc chỉ được gửi khi bạn tham gia tiệc.",
-        "Vui lòng chọn thời gian tham gia tiệc.",
-        "Số người tham dự phải từ 1 người trở lên.",
         "Kênh nhận phản hồi chưa được cấu hình. Vui lòng liên hệ chủ tiệc.",
       ];
       const message = error instanceof Error ? error.message : "";
@@ -87,45 +91,24 @@ export default function App() {
     }
   }
 
-  function chooseParty(attending: boolean) {
-    setSubmissionError("");
-    if (attending) {
-      if (!partyOptionsAvailable) {
-        setSubmissionState("error");
-        setSubmissionError(
-          "Hiện chưa có thời gian tiệc phù hợp để lựa chọn. Vui lòng liên hệ chủ tiệc.",
-        );
-        return;
-      }
-      setStep("party-details");
-      return;
-    }
-    void submitRSVP({ ...baseRSVP, partyAttendance: false });
-  }
-
   const contactHref = `tel:${eventConfig.contactPhone.replace(/[^+\d]/g, "")}`;
 
   return (
     <main className="site-shell">
       <div className="film-grain" aria-hidden="true" />
       <header className="top-bar">
-        <span className="top-bar__mark">NQA</span>
-        <span>Lời mời tốt nghiệp</span>
+        <span className="top-bar__mark">@3w_8letters</span>
         <span className="top-bar__year">2026</span>
       </header>
 
       {step === "invitation" && (
         <>
           <section className="hero reveal">
-            <div className="hero__ornament" aria-hidden="true">
-              ✦
-            </div>
+            <div className="hero__ornament" aria-hidden="true">✦</div>
             <h2 className="hero__name">Trân trọng kính mời</h2>
             <h1>Lễ tốt nghiệp</h1>
             <p className="hero__name">{eventConfig.graduateName}</p>
-            <div
-              className={`photo-frame ${!eventConfig.showGraduatePhoto ? "photo-frame--hidden" : ""}`}
-            >
+            <div className={`photo-frame ${!eventConfig.showGraduatePhoto ? "photo-frame--hidden" : ""}`}>
               {eventConfig.showGraduatePhoto ? (
                 <img
                   src={eventConfig.graduatePhoto}
@@ -142,23 +125,14 @@ export default function App() {
           </section>
 
           <div className="content-column">
-            <SectionCard
-              eyebrow="Thông tin buổi lễ"
-              title="Vinh dự được gặp bạn vào ngày đặc biệt này"
-            >
+            <SectionCard eyebrow="Thông tin buổi lễ" title="Vinh dự được gặp bạn vào ngày đặc biệt này">
               <div className="event-info">
-                <div className="event-info__icon" aria-hidden="true">
-                  ◷
-                </div>
+                <div className="event-info__icon" aria-hidden="true">◷</div>
                 <div>
                   <span>Thời gian</span>
-                  <strong>
-                    {eventConfig.ceremonyTime} — {eventConfig.ceremonyDate}
-                  </strong>
+                  <strong>{eventConfig.ceremonyTime} — {eventConfig.ceremonyDate}</strong>
                 </div>
-                <div className="event-info__icon" aria-hidden="true">
-                  ⌖
-                </div>
+                <div className="event-info__icon" aria-hidden="true">⌖</div>
                 <div>
                   <span>Địa điểm</span>
                   <strong>{eventConfig.ceremonyLocation}</strong>
@@ -166,11 +140,7 @@ export default function App() {
                     <small>{eventConfig.ceremonyAddress}</small>
                   )}
                   {eventConfig.mapUrl && (
-                    <a
-                      href={eventConfig.mapUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
+                    <a href={eventConfig.mapUrl} target="_blank" rel="noreferrer">
                       Mở bản đồ ↗
                     </a>
                   )}
@@ -178,10 +148,7 @@ export default function App() {
               </div>
             </SectionCard>
 
-            <SectionCard
-              eyebrow="Xác nhận tham dự"
-              title="Bạn có thể đến chung vui cùng mình chứ?"
-            >
+            <SectionCard eyebrow="Xác nhận tham dự" title="Bạn có thể đến chung vui cùng mình chứ?">
               <p className="section-copy">
                 Chỉ mất một phút để mình chuẩn bị chu đáo hơn cho ngày gặp mặt.
               </p>
@@ -196,11 +163,7 @@ export default function App() {
               </div>
               <a href={contactHref}>{eventConfig.contactPhone}</a>
               {eventConfig.contactZalo && (
-                <a
-                  href={eventConfig.contactZalo}
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a href={eventConfig.contactZalo} target="_blank" rel="noreferrer">
                   Nhắn Zalo ↗
                 </a>
               )}
@@ -214,95 +177,26 @@ export default function App() {
           <BackButton
             label="Quay lại lời mời"
             onClick={() => goBack("invitation")}
+            disabled={submissionState === "submitting"}
           />
-          <SectionCard
-            eyebrow="Một chút thông tin"
-            title="Cho mình biết tên bạn nhé"
-          >
+          <SectionCard eyebrow="Một chút thông tin" title="Cho mình biết tên bạn và để lại lời chúc nhé">
             <GuestNameForm
               attendingCeremony={ceremonyReply}
               initialName={draft.guestName}
               initialWish={draft.wellWish}
               onContinue={saveName}
             />
-          </SectionCard>
-        </div>
-      )}
-
-      {step === "party" && (
-        <div className="flow-column">
-          <BackButton
-            label="Quay lại nhập tên"
-            onClick={() => goBack("name")}
-            disabled={submissionState === "submitting"}
-          />
-          <SectionCard
-            eyebrow="🥂 Dự định tiệc tốt nghiệp"
-            title="Bạn có thể tham gia bữa tiệc nhỏ cùng mình không?"
-          >
-            <p className="section-copy">{eventConfig.partyDescription}</p>
-            <div className="choice-grid">
-              <button
-                className="button button-primary"
-                onClick={() => chooseParty(true)}
-                disabled={submissionState === "submitting"}
-              >
-                🥂 Có, mình sẽ tham gia
-              </button>
-              <button
-                className="button button-secondary"
-                onClick={() => chooseParty(false)}
-                disabled={submissionState === "submitting"}
-              >
-                💌 Rất tiếc, mình không thể tham gia
-              </button>
-            </div>
+            
+            {/* Hiển thị trạng thái gửi Form ở bước này luôn */}
             {submissionState === "submitting" && (
-              <p className="submission-message" aria-live="polite">
-                Đang gửi xác nhận...
-              </p>
-            )}
-            {submissionError && (
-              <div className="submission-error" role="alert">
-                <p>{submissionError}</p>
-                <button
-                  className="text-button"
-                  onClick={() => chooseParty(false)}
-                  disabled={submissionState === "submitting"}
-                >
-                  Thử lại
-                </button>
+              <div className="submission-message" aria-live="polite" style={{ marginTop: '16px', textAlign: 'center' }}>
+                Đang gửi lời chúc...
               </div>
             )}
-          </SectionCard>
-        </div>
-      )}
-
-      {step === "party-details" && (
-        <div className="flow-column">
-          <BackButton
-            label="Quay lại chọn tiệc"
-            onClick={() => goBack("party")}
-            disabled={submissionState === "submitting"}
-          />
-          <SectionCard
-            eyebrow="🥂 Dự định tiệc tốt nghiệp"
-            title="Khung thời gian nào phù hợp với bạn?"
-          >
-            <PartyDetails
-              isSubmitting={submissionState === "submitting"}
-              onSubmit={(details) =>
-                void submitRSVP({
-                  ...baseRSVP,
-                  partyAttendance: true,
-                  ...details,
-                })
-              }
-            />
             {submissionError && (
-              <p className="submission-error" role="alert">
-                {submissionError}
-              </p>
+              <div className="submission-error" role="alert" style={{ marginTop: '16px' }}>
+                <p>{submissionError}</p>
+              </div>
             )}
           </SectionCard>
         </div>
@@ -310,17 +204,12 @@ export default function App() {
 
       {step === "thanks" && completedRSVP && (
         <div className="flow-column flow-column--thanks">
-          <BackButton
-            label="Về lại lời mời"
-            onClick={() => goBack("invitation")}
-          />
+          <BackButton label="Về lại lời mời" onClick={() => goBack("invitation")} />
           <ThankYou rsvp={completedRSVP} />
         </div>
       )}
 
-      <footer>
-        Sự hiện diện của bạn sẽ làm ngày đặc biệt này thêm trọn vẹn.
-      </footer>
+      <footer>Sự hiện diện của bạn sẽ làm ngày đặc biệt này thêm trọn vẹn.</footer>
     </main>
   );
 }

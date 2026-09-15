@@ -31,8 +31,8 @@ export function GuestNameForm({
     <form className="form-stack" onSubmit={submit} noValidate>
       <p className="warm-message">
         {attendingCeremony
-          ? "Tuyệt vời! Mình rất vui khi bạn có thể đến. Nếu bạn muốn, hãy để lại một lời chúc nhé. ❤️"
-          : "Mình rất tiếc vì bạn không thể tham dự lễ tốt nghiệp. Nếu bạn muốn, hãy để lại một lời chúc nhé. ❤️"}
+          ? "Tuyệt vời! Mình rất vui khi bạn có thể đến. Nếu được, hãy để lại một lời chúc nhé. ❤️"
+          : "Mình rất tiếc vì bạn không thể tham dự lễ tốt nghiệp. Nếu được, hãy để lại một lời chúc nhé. ❤️"}
       </p>
       <div>
         <label htmlFor="guest-name">Vui lòng cho mình biết tên của bạn.</label>
@@ -64,7 +64,7 @@ export function GuestNameForm({
           id="guest-wish"
           rows={4}
           maxLength={500}
-          placeholder="Viết một lời chúc ngắn..."
+          placeholder="Viết một lời chúc của bạn..."
           value={wish}
           onChange={(event) => setWish(event.target.value)}
         />

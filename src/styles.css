@@ -73,6 +73,9 @@ a {
 }
 .top-bar__year {
   color: #a27c37;
+  font-family: "Noto Serif", Georgia, "Times New Roman", serif;
+  font-size: 16px;
+  letter-spacing: 0.02em;
 }
 
 .hero {
@@ -148,7 +151,7 @@ h2 {
   height: 100%;
   display: block;
   object-fit: cover;
-  filter: saturate(0.72) contrast(0.96);
+  filter: none; 
 }
 .photo-frame--hidden {
   width: 78px;

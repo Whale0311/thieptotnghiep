@@ -6,22 +6,22 @@ export type PartyDateOption = {
 };
 
 export const eventConfig = {
-  graduateName: "Nguyễn Quốc Anh",
+  graduateName: "Vũ Đức Anh",
   // graduatePhoto: "https://ik.imagekit.io/c9utaptx0/20224919_NguyenQuocAnh.jpg",
-  graduatePhoto: "images/mhx_2023_v4.jpg",
+  graduatePhoto: "images/vda.jpg",
   showGraduatePhoto: true,
 
   invitationMessage:
     "Một chặng đường khép lại, một hành trình mới bắt đầu. Mình rất vui nếu bạn có thể đến chung vui cùng mình trong ngày đặc biệt này.",
 
-  ceremonyDate: "Thứ 7, 26/09/2026",
-  ceremonyTime: "09:30",
+  ceremonyDate: "Chủ Nhật, 27/09/2026",
+  ceremonyTime: "09:30 - 12:00",
   ceremonyLocation: "Sân C2 - Cổng Parabol, Đại học Bách Khoa Hà Nội",
   ceremonyAddress: "Số 1 Đại Cồ Việt, Bạch Mai, Hà Nội",
   mapUrl: "https://maps.app.goo.gl/G7rVwWvvqv8C2K4d6",
 
-  contactName: "Nguyễn Quốc Anh",
-  contactPhone: "0868953218",
+  contactName: "Vũ Đức Anh",
+  contactPhone: "0914936249",
   contactZalo: "",
 
   partyDescription:
